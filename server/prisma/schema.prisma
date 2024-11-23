@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,44 +8,79 @@ datasource db {
 }
 
 model Session {
-  meetingId               String         @id @default(auto()) @map("_id") @db.ObjectId
-  start                   DateTime
-  end                     DateTime
-  uniqueParticipantsCount Int
-  participants            Participant[]  @relation("SessionParticipants")
+  id                      String        @id @default(auto()) @map("_id") @db.ObjectId
+  meetingId               String        @unique
+  start                   DateTime      @default(now())
+  end                     DateTime?
+  uniqueParticipantsCount Int           @default(0)
+  participants            Participant[]
 }
 
 model Participant {
-  participantId           String         @id @default(auto()) @map("_id") @db.ObjectId
-  name                    String
-  sessionId               String         @db.ObjectId
-  session                 Session        @relation("SessionParticipants", fields: [sessionId], references: [meetingId])
-  events                  Event[]        @relation("ParticipantEvents")
-  timelog                 Timelog[]      @relation("ParticipantTimelogs")
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  participantId String
+  events        Event?
+  Session       Session?  @relation(fields: [sessionId], references: [id])
+  sessionId     String?   @db.ObjectId
+  timelog       Timelog[]
 }
 
 model Event {
-  id                      String         @id @default(auto()) @map("_id") @db.ObjectId
-  type                    EventType
-  start                   DateTime
-  end                     DateTime?
-  message                 String?
-  participantId           String         @db.ObjectId
-  participant             Participant    @relation("ParticipantEvents", fields: [participantId], references: [participantId])
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  Participant      Participant        @relation(fields: [pId], references: [id])
+  pId              String             @unique @db.ObjectId
+  mic              MicEvent[]
+  webcam           WebcamEvent[]
+  errors           ErrorEvent[]
+  screenShare      ScreenShare[]
+  screenShareAudio ScreenShareAudio[]
+}
+
+model MicEvent {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  start   DateTime
+  end     DateTime?
+  Event   Event?    @relation(fields: [eventId], references: [id])
+  eventId String?   @db.ObjectId
+}
+
+model WebcamEvent {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  start   DateTime
+  end     DateTime?
+  Event   Event?    @relation(fields: [eventId], references: [id])
+  eventId String?   @db.ObjectId
+}
+
+model ErrorEvent {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  start   DateTime
+  message String
+  Event   Event?   @relation(fields: [eventId], references: [id])
+  eventId String?  @db.ObjectId
+}
+
+model ScreenShare {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  start   DateTime
+  end     DateTime?
+  Event   Event?    @relation(fields: [eventId], references: [id])
+  eventId String?   @db.ObjectId
+}
+
+model ScreenShareAudio {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  start   DateTime
+  end     DateTime?
+  Event   Event?    @relation(fields: [eventId], references: [id])
+  eventId String?   @db.ObjectId
 }
 
 model Timelog {
-  id                      String         @id @default(auto()) @map("_id") @db.ObjectId
-  start                   DateTime
-  end                     DateTime
-  participantId           String         @db.ObjectId
-  participant             Participant    @relation("ParticipantTimelogs", fields: [participantId], references: [participantId])
-}
-
-enum EventType {
-  MIC
-  WEBCAM
-  SCREEN_SHARE
-  SCREEN_SHARE_AUDIO
-  ERROR
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  start         DateTime
+  end           DateTime?
+  Participant   Participant? @relation(fields: [participantId], references: [id])
+  participantId String?      @db.ObjectId
 }
