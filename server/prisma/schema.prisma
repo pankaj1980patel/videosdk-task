@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  meetingId               String         @id @default(auto()) @map("_id") @db.ObjectId
+  start                   DateTime
+  end                     DateTime
+  uniqueParticipantsCount Int
+  participants            Participant[]  @relation("SessionParticipants")
+}
+
+model Participant {
+  participantId           String         @id @default(auto()) @map("_id") @db.ObjectId
+  name                    String
+  sessionId               String         @db.ObjectId
+  session                 Session        @relation("SessionParticipants", fields: [sessionId], references: [meetingId])
+  events                  Event[]        @relation("ParticipantEvents")
+  timelog                 Timelog[]      @relation("ParticipantTimelogs")
+}
+
+model Event {
+  id                      String         @id @default(auto()) @map("_id") @db.ObjectId
+  type                    EventType
+  start                   DateTime
+  end                     DateTime?
+  message                 String?
+  participantId           String         @db.ObjectId
+  participant             Participant    @relation("ParticipantEvents", fields: [participantId], references: [participantId])
+}
+
+model Timelog {
+  id                      String         @id @default(auto()) @map("_id") @db.ObjectId
+  start                   DateTime
+  end                     DateTime
+  participantId           String         @db.ObjectId
+  participant             Participant    @relation("ParticipantTimelogs", fields: [participantId], references: [participantId])
+}
+
+enum EventType {
+  MIC
+  WEBCAM
+  SCREEN_SHARE
+  SCREEN_SHARE_AUDIO
+  ERROR
+}
