@@ -6,7 +6,7 @@ import {
   createSessionSchema,
   removeParticipantFromSessionSchema,
   updateSessionSchema,
-} from "../shema/session.schema";
+} from "../schema/session.schema";
 
 const sessionRouter = express.Router();
 

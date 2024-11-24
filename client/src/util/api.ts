@@ -1,4 +1,6 @@
-export const buildQueryString = (params: Record<string, any>): string => {
+export const buildQueryString = (
+  params: Record<string, string | number | boolean>
+): string => {
   return Object.keys(params)
     .filter(
       (key) =>

@@ -31,7 +31,7 @@ export const preprocessData = (data: MeetingDetailData): PreprocessedData => {
   const totalDuration = differenceInSeconds(meetingEnd, meetingStart);
 
   const participants = data.participants.map((participant) => {
-    let participantEvents = participant.events
+    const participantEvents = participant.events
       ? {
           mic: participant.events.mic,
           webcam: participant.events.webcam,

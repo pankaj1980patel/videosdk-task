@@ -10,7 +10,7 @@ export const fetcher = async <TResponse>({
 }: {
   url: string;
   method?: HttpMethod;
-  data?: any;
+  data?: unknown;
   customHeaders?: Record<string, string>;
   fetchInit?: RequestInit;
 }): Promise<TResponse> => {

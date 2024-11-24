@@ -37,7 +37,7 @@ class SessionController {
           total: totalSessions,
           page: pageNumber,
           limit: pageLimit,
-          totalPages: Math.ceil(totalSessions / pageLimit),
+          totalPages: Math.max(Math.ceil(totalSessions / pageLimit), 1),
         },
       });
     } catch (error) {

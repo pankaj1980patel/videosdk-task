@@ -3,13 +3,11 @@ import Pagination from "@/components/Table/TablePagination";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import Link from "next/link";
 

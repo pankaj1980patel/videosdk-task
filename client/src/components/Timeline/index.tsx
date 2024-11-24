@@ -46,8 +46,7 @@ const ICON_SET_OFF = {
   error: CircleAlert,
 };
 const Timeline: React.FC<TimelineProps> = ({ data }) => {
-  const { meetingStart, meetingEnd, totalDuration, participants } =
-    preprocessData(data);
+  const { meetingStart, meetingEnd, participants } = preprocessData(data);
   const normalizedMeetingStart = new Date(
     new Date(meetingStart).setSeconds(0, 0)
   );
@@ -100,7 +99,7 @@ const Timeline: React.FC<TimelineProps> = ({ data }) => {
         {/* Participants Container */}
         <ScrollArea className="h-[calc(100vh-105px)]">
           <div className="">
-            {participants.map((participant, index) => (
+            {participants.map((participant) => (
               <div
                 key={participant.participantId}
                 className={cn(

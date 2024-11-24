@@ -1,6 +1,5 @@
-import { getSessionDetailsById, getSessions } from "@/api/session/session";
+import { getSessionDetailsById } from "@/api/session/session";
 import Timeline from "@/components/Timeline";
-import Image from "next/image";
 
 type Params = Promise<{ meetingId: string }>;
 
