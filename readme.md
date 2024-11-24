@@ -69,6 +69,31 @@ Ensure the following tools are installed on your system:
 
 ```
 
+#### src/ Directory Structure
+
+    1. features/
+    - Contains feature-specific code modules, such as route handlers, services, or controllers for distinct functionalities.
+    2. globals/
+    - Stores global constants, shared configurations, or reusable modules across the project.
+    3. index.ts
+    - The main entry point of the application.
+    - Imports and organizes core modules before the application starts.
+    4. prisma.ts
+    - Sets up the Prisma client for database interaction.
+    5. server.ts
+    - Configures and starts the server.
+    - Includes middleware, routes, and other server-related settings.
+    6. util/
+    - Contains utility functions and helper modules to support the application (e.g., error handling, logging).
+
+
+
+
+
+
+
+
+
 ## Setup Instructions
 
 - #### Clone Repository
